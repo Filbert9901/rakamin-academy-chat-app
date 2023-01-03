@@ -29,3 +29,7 @@ After executing `php artisan db:seed --class=UserSeeder`. Your database should c
 }    
 3. GET http://127.0.0.1:8000/api/chat/2 This API is used to get a conversation from a specific user. You only need to fill the user_id at the end of the endpoint. In this example. I want to get my conversation with the user that has the id of 2.
 4. GET http://127.0.0.1:8000/api/chat/ This API is used to get all of your conversation with every user that you have previously interacted with.  This API will display all of the information that is based on the scenario.
+
+
+## Unit Testing
+For unit testing you need to execute `php artisan test`
