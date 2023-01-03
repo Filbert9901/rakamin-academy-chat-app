@@ -10,6 +10,8 @@ After you have cloned the project. There are few commands that need to be execut
 7. Open up your terminal on the project that you have cloned and execute `php artisan key:generate`
 8. Open up your terminal on the project that you have cloned and execute `php artisan serve`
 9. Now you can start testing the API using an application like Postman which I used to build the API. The base URL for local is http://127.0.0.1:8000/api/
+10. Open up Postman and set the Headers value for Accept to application/json. If you can't change the value, just uncheck the Accept key and create a new one.
+11. For starters you can try GET http://127.0.0.1:8000/api/chat and you will get {"message": "Unauthenticated."}.
 
 After executing `php artisan db:seed --class=UserSeeder`. Your database should contain 3 rows of data in the users table, which you can use to try out the API and all of the account's password is password.
 
