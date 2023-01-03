@@ -18,7 +18,6 @@ class GetConversationListTest extends TestCase
      */
     public function test_get_all_conversation_list()
     {
-        SenderReceiver::truncate();
         [$user1, $user2, $user3] = User::factory(3)->create();
         $message_from_user2 = SenderReceiver::factory()->create(['receiver_id' => $user1->id, 'sender_id' => $user2->id]);
         $message_from_user3 = SenderReceiver::factory()->create(['receiver_id' => $user1->id, 'sender_id' => $user3->id]);
@@ -49,7 +48,6 @@ class GetConversationListTest extends TestCase
 
     public function test_get_all_conversation_list_when_there_is_no_conversation()
     {
-        SenderReceiver::truncate();
         $user = User::factory()->create();
         Sanctum::actingAs($user);
         $response = $this->get("/api/chat/", ['Accept' => 'application/json']);

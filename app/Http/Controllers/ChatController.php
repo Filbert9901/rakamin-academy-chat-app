@@ -23,6 +23,7 @@ class ChatController extends Controller
         $data = DB::table('sender_receiver')
             ->whereIn('sender_id', [auth()->user()->id, $user->id])
             ->whereIn('receiver_id', [auth()->user()->id, $user->id])
+            ->orderBy('created_at')
             ->get();
         if ($data->isEmpty()) return response()->json(["result" => "You have not started a conversation with {$user->name}"], 200);
         // update message status to read
@@ -36,12 +37,24 @@ class ChatController extends Controller
     function getAllConversations()
     {
         $data = DB::table('sender_receiver')
-            ->select(DB::raw('count(*) as unread_count, users.name, message'))
+            ->select(DB::raw('count(*) as unread_count, users.name, message, sender_id'))
             ->join('users', 'sender_receiver.sender_id', '=', 'users.id')
             ->where('receiver_id', auth()->user()->id)
             ->where('status', 'Unread')
             ->groupBy('sender_id')
-            ->latest('sender_receiver.created_at')->get();
+            ->get();
+
+        // set latest message
+        $data = $data->map(function ($item) {
+            $latest_message = DB::table('sender_receiver')
+                ->select('message')
+                ->where('receiver_id', auth()->user()->id)
+                ->where('sender_id', $item->sender_id)
+                ->where('status', 'Unread')
+                ->latest('sender_receiver.created_at')->first();
+            $item->message = $latest_message->message;
+            return $item;
+        });
         if ($data->isEmpty()) return response()->json(["result" => "You have not started any conversation yet"], 200);
         return ["data" => $data];
     }

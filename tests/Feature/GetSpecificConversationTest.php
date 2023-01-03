@@ -18,7 +18,6 @@ class GetSpecificConversationTest extends TestCase
      */
     public function test_get_conversation_from_a_specific_user()
     {
-        SenderReceiver::truncate();
         [$user1, $user2] = User::factory(2)->create();
         $message_from_user1 = SenderReceiver::factory()->create(['receiver_id' => $user2->id, 'sender_id' => $user1->id]);
         $message_from_user2 = SenderReceiver::factory()->create(['receiver_id' => $user1->id, 'sender_id' => $user2->id]);
@@ -51,8 +50,7 @@ class GetSpecificConversationTest extends TestCase
 
     public function test_get_conversation_from_self()
     {
-        SenderReceiver::truncate();
-        [$user1, $user2] = User::factory(2)->create();
+        $user1 = User::factory()->create();
         Sanctum::actingAs($user1);
         $response = $this->get("/api/chat/{$user1->id}", ['Accept' => 'application/json']);
         $response->assertJson(["result" => "You cannot view a conversation with yourself"]);
@@ -61,7 +59,6 @@ class GetSpecificConversationTest extends TestCase
 
     public function test_get_conversation_from_a_specific_user_when_conversation_is_not_started()
     {
-        SenderReceiver::truncate();
         [$user1, $user2] = User::factory(2)->create();
         Sanctum::actingAs($user1);
         $response = $this->get("/api/chat/{$user2->id}", ['Accept' => 'application/json']);
