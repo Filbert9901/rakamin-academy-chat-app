@@ -11,13 +11,15 @@ class ChatController extends Controller
 {
     function sendMessage(Request $request)
     {
-        if (!$request->message) return;
+        if ($request->receiver_id == auth()->user()->id) return ["result" => "You cannot send a message to yourself"];
+        else if (!$request->message) return;
         auth()->user()->chatFriends()->attach($request->receiver_id, ['message' => $request->message]);
         return ["result" => "Message sent successfully", "message" => $request->message];
     }
 
     function getConversation(User $user)
     {
+        if ($user->receiver_id == auth()->user()->id) return ["result" => "You cannot view a conversation with yourself"];
         $data = DB::table('sender_receiver')
             ->whereIn('sender_id', [auth()->user()->id, $user->id])
             ->whereIn('receiver_id', [auth()->user()->id, $user->id])
