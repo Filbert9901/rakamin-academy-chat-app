@@ -15,18 +15,15 @@ After executing `php artisan db:seed --class=UserSeeder`. Your database should c
 
 
 ## List of API
-1. GET http://127.0.0.1:8000/api/login This API is used to authenticate a user and then return the access token needed to access the chat feature. After you have succesfully log in and acquire the token. In Postman. Go to the Authorization tab and choose Bearer Token for the Type and then paste the token that you get from successfully logging in. Now you are authorized to access the rest of the API. Here is an example that you can use to login 
+1. GET http://127.0.0.1:8000/api/login This API is used to authenticate a user and then return the access token needed to access the chat feature. After you have succesfully log in and acquire the token. In Postman. Go to the Authorization tab and choose Bearer Token for the Type and then paste the token that you get from successfully logging in. Now you are authorized to access the rest of the API. Here is an example that you can use to login
 {
     "email": "john@john.com",
     "password": "password"
 }
-
 2. POST http://127.0.0.1:8000/api/chat/ This API is used to send a message to a specific user. There are 2 fields that you need to fill in order to use the API. The fields are message and receiver_id. Here is an example that you can use to send a message from user_id 1 to user_id 2. 
 {
     "message":"Hello Filbert",
     "receiver_id" : 2
-}
-    
-3.GET http://127.0.0.1:8000/api/chat/2 This API is used to get a conversation from a specific user. You only need to fill the user_id at the end of the endpoint. In this example. I want to get my conversation with user that has the id of 2.
-
-4.GET http://127.0.0.1:8000/api/chat/2 This API is used to get all of your conversation with every user that you have previously interacted with.  This API will display all of the information that is based on the scenario.
+}    
+3. GET http://127.0.0.1:8000/api/chat/2 This API is used to get a conversation from a specific user. You only need to fill the user_id at the end of the endpoint. In this example. I want to get my conversation with user that has the id of 2.
+4. GET http://127.0.0.1:8000/api/chat/ This API is used to get all of your conversation with every user that you have previously interacted with.  This API will display all of the information that is based on the scenario.
