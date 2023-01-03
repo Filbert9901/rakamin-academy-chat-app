@@ -48,4 +48,24 @@ class GetSpecificConversationTest extends TestCase
         $response->assertJson(['message' => 'Unauthenticated.']);
         $response->assertStatus(401);
     }
+
+    public function test_get_conversation_from_self()
+    {
+        SenderReceiver::truncate();
+        [$user1, $user2] = User::factory(2)->create();
+        Sanctum::actingAs($user1);
+        $response = $this->get("/api/chat/{$user1->id}", ['Accept' => 'application/json']);
+        $response->assertJson(["result" => "You cannot view a conversation with yourself"]);
+        $response->assertStatus(400);
+    }
+
+    public function test_get_conversation_from_a_specific_user_when_conversation_is_not_started()
+    {
+        SenderReceiver::truncate();
+        [$user1, $user2] = User::factory(2)->create();
+        Sanctum::actingAs($user1);
+        $response = $this->get("/api/chat/{$user2->id}", ['Accept' => 'application/json']);
+        $response->assertJson(["result" => "You have not started a conversation with {$user2->name}"]);
+        $response->assertStatus(200);
+    }
 }

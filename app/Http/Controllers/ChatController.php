@@ -19,12 +19,12 @@ class ChatController extends Controller
 
     function getConversation(User $user)
     {
-        if ($user->id == auth()->user()->id) return ["result" => "You cannot view a conversation with yourself"];
+        if ($user->id == auth()->user()->id) return response()->json(["result" => "You cannot view a conversation with yourself"], 400);
         $data = DB::table('sender_receiver')
             ->whereIn('sender_id', [auth()->user()->id, $user->id])
             ->whereIn('receiver_id', [auth()->user()->id, $user->id])
             ->get();
-
+        if ($data->isEmpty()) return response()->json(["result" => "You have not started a conversation with {$user->name}"], 200);
         // update message status to read
         DB::table('sender_receiver')
             ->where('receiver_id', auth()->user()->id)
