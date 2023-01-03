@@ -42,6 +42,7 @@ class ChatController extends Controller
             ->where('status', 'Unread')
             ->groupBy('sender_id')
             ->latest('sender_receiver.created_at')->get();
+        if ($data->isEmpty()) return response()->json(["result" => "You have not started any conversation yet"], 200);
         return ["data" => $data];
     }
 }

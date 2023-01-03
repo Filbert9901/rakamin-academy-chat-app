@@ -46,4 +46,14 @@ class GetConversationListTest extends TestCase
         $response->assertJson(['message' => 'Unauthenticated.']);
         $response->assertStatus(401);
     }
+
+    public function test_get_all_conversation_list_when_there_is_no_conversation()
+    {
+        SenderReceiver::truncate();
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        $response = $this->get("/api/chat/", ['Accept' => 'application/json']);
+        $response->assertJson(['result' => 'You have not started any conversation yet']);
+        $response->assertStatus(200);
+    }
 }
