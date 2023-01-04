@@ -39,4 +39,24 @@ class LoginTest extends TestCase
         $response->assertJson(["message" => "These credentials do not match our records."]);
         $response->assertStatus(404);
     }
+
+    public function test_login_with_no_email()
+    {
+        $data = ['email' => '', 'password' => 'password'];
+        $response = $this->post('/api/login', $data, ['Accept' => 'application/json']);
+        $response->assertJson(["email" => [
+            'The email field is required.',
+        ]]);
+        $response->assertStatus(400);
+    }
+
+    public function test_login_with_no_password()
+    {
+        $data = ['email' => 'john@john.com', 'password' => ''];
+        $response = $this->post('/api/login', $data, ['Accept' => 'application/json']);
+        $response->assertJson(["password" => [
+            'The password field is required.',
+        ]]);
+        $response->assertStatus(400);
+    }
 }

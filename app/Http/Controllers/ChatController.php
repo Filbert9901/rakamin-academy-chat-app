@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SendMessageRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -9,10 +10,9 @@ use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
-    function sendMessage(Request $request)
+    function sendMessage(SendMessageRequest $request)
     {
         if ($request->receiver_id == auth()->user()->id) return response()->json(["result" => "You cannot send a message to yourself"], 400);
-        else if (!$request->message) return response()->json(["result" => "Empty message is not sent"], 400);
         auth()->user()->chatFriends()->attach($request->receiver_id, ['message' => $request->message]);
         return ["result" => "Message sent successfully", "message" => $request->message];
     }
